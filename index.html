@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Si Eri – Sistem Peredaran Darah</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#1b1646;--bg2:#3a1c5e;--red:#ff5a5f;--blue:#4cc9f0;--yel:#ffd166;--grn:#6ee7a8;--ink:#fff;--card:rgba(255,255,255,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));overflow-x:hidden}
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.bg i{position:absolute;bottom:-60px;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9a9e,#d7263d);opacity:.35;animation:rise linear infinite}
+.bg i:nth-child(even){background:radial-gradient(circle at 35% 35%,#fff,#bcd);opacity:.2;width:22px;height:22px}
+@keyframes rise{to{transform:translateY(-115vh) rotate(360deg)}}
+main{position:relative;max-width:640px;margin:0 auto;padding:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.pill{background:var(--card);border-radius:999px;padding:4px 14px;font-weight:700}
+.btn{font:inherit;font-weight:800;font-size:1.1rem;border:0;border-radius:16px;padding:10px 22px;background:var(--yel);color:#3b2300;cursor:pointer;box-shadow:0 5px 0 #c79a2e;transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #c79a2e}
+.btn:focus-visible,.opt:focus-visible,.node:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.btn.sm{padding:4px 12px;font-size:1rem;background:var(--card);color:#fff;box-shadow:none}
+.scr{display:none;text-align:center}.scr.on{display:block;animation:pop .45s ease}
+@keyframes pop{from{opacity:0;transform:scale(.94)}}
+h1{font-size:2.3rem;line-height:1.05;margin:6px 0}
+h2{margin:6px 0;font-size:1.5rem}
+p{margin:6px 0;line-height:1.35}
+.card{background:var(--card);backdrop-filter:blur(6px);border-radius:22px;padding:16px;margin:10px 0;border:1px solid rgba(255,255,255,.18)}
+.heart{width:150px;height:150px;margin:6px auto;animation:beat .9s infinite;filter:drop-shadow(0 8px 18px rgba(255,90,95,.6))}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+.opts{display:grid;gap:10px;margin-top:12px}
+.opt{font:inherit;font-weight:700;font-size:1.05rem;text-align:left;color:#fff;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.25);border-radius:16px;padding:10px 14px;cursor:pointer}
+.opt.ok{background:#1f9d62;border-color:var(--grn);animation:pop .3s}
+.opt.no{background:#b3263d;border-color:var(--red);animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.bar{height:10px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden;margin:6px 0}
+.bar b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--grn));transition:width .5s}
+.fb{min-height:3.2em;font-weight:600;color:var(--yel)}
+svg{max-width:100%;height:auto}
+.node{cursor:pointer}
+.node circle.ring{transition:fill .3s}
+.node:hover circle.ring{fill:rgba(255,255,255,.3)}
+.cell{transition:transform .9s cubic-bezier(.5,0,.3,1)}
+.stars{font-size:3rem;letter-spacing:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+<main>
+<div class="top"><span class="pill" id="lvl">Petualangan Antasari</span><span><span class="pill" id="score">⭐ 0</span> <button class="btn sm" id="mus" aria-label="Musik">🎵 Musik: mati</button></span></div>
+
+<section class="scr on" id="s0">
+ <svg class="heart" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="hg" cx=".35" cy=".3"><stop offset="0" stop-color="#ff9a9e"/><stop offset="1" stop-color="#d7263d"/></radialGradient></defs><path d="M50 90C20 66 8 48 8 32 8 18 19 9 31 9c8 0 15 4 19 11C54 13 61 9 69 9c12 0 23 9 23 23 0 16-12 34-42 58z" fill="url(#hg)"/><circle cx="38" cy="38" r="6" fill="#fff" opacity=".6"/><circle cx="62" cy="38" r="6" fill="#fff" opacity=".6"/><path d="M40 56q10 9 20 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+ <h1>Petualangan Si Eri</h1>
+ <p>IPAS Kelas 5 · Sistem Peredaran Darah Manusia</p>
+ <div class="card"><p>Halo! Aku <b>Eri</b>, sel darah merah. Ikut aku keliling tubuh lewat 3 misi, ya!</p>
+ <p>🩺 Misi 1: Kenali jantung dan pembuluh<br>🗺️ Misi 2: Ikuti perjalanan darah<br>🧪 Misi 3: Kenali isi darah</p></div>
+ <button class="btn" id="go">Mulai Petualangan!</button>
+</section>
+
+<section class="scr" id="s1"><div id="qz"></div></section>
+
+<section class="scr" id="s2">
+ <h2>Misi 2: Perjalanan Darah</h2>
+ <p id="m2t">Eri berada di seluruh tubuh. Ketuk tempat tujuan berikutnya!</p>
+ <svg viewBox="0 0 400 400" id="map" role="img" aria-label="Peta peredaran darah"></svg>
+ <div class="card fb" id="m2f"></div>
+</section>
+
+<section class="scr" id="s4">
+ <h1>Misi Selesai!</h1>
+ <div class="stars" id="stars"></div>
+ <div class="card"><h2 id="rt"></h2><p id="rp"></p>
+ <p>Ingat: jantung memompa, arteri membawa darah dari jantung, vena membawa darah kembali, dan kapiler menukar zat. Jaga jantungmu dengan olahraga dan makan sehat!</p></div>
+ <button class="btn" id="again">Main lagi</button>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+let score=0,AC=null,music=false,timer=null,step=0;
+function shuf(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1])}
+function show(n){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$('s'+n).classList.add('on')}
+function setScore(n){score+=n;$('score').textContent='⭐ '+score}
+
+/* Latar sel darah melayang */
+for(let i=0;i<14;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.animationDuration=(9+Math.random()*10)+'s';e.style.animationDelay=(-Math.random()*12)+'s';$('bg').appendChild(e)}
+
+/* Suara: musik latar & efek */
+function ctx(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t,d,type,v){const a=ctx();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.06,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+d);o.connect(g).connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+d+.05)}
+const mel=[523,659,784,880,784,659,587,659,523,659,784,1047,880,784,659,587],bass=[131,131,175,175,196,196,131,131];
+let ni=0;
+function startMusic(){stopMusic();timer=setInterval(()=>{tone(mel[ni%16],0,.32,'triangle',.05);if(ni%2==0)tone(bass[(ni/2)%8],0,.6,'sine',.07);ni++},330)}
+function stopMusic(){clearInterval(timer);timer=null}
+$('mus').onclick=()=>{music=!music;music?(ctx(),startMusic()):stopMusic();$('mus').textContent='🎵 Musik: '+(music?'nyala':'mati')};
+const sfx={ok(){tone(660,0,.12,'square',.04);tone(880,.1,.2,'square',.04)},no(){tone(220,0,.25,'sawtooth',.05)},beat(){tone(70,0,.15,'sine',.2);tone(60,.18,.18,'sine',.2)},win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.14,.3,'triangle',.08))}};
+
+/* Kuis */
+const L1=[
+{q:'Apa tugas utama jantung?',o:['Memompa darah ke seluruh tubuh','Mencerna makanan','Menyaring udara','Menyimpan tulang'],a:0,e:'Jantung bekerja seperti pompa yang tidak pernah berhenti.'},
+{q:'Pembuluh yang membawa darah DARI jantung ke seluruh tubuh disebut ...',o:['Vena','Arteri (nadi)','Kapiler','Trakea'],a:1,e:'Arteri membawa darah dari jantung. Dindingnya tebal dan lentur.'},
+{q:'Pembuluh yang membawa darah KEMBALI ke jantung disebut ...',o:['Arteri','Kapiler','Vena (pembuluh balik)','Kerongkongan'],a:2,e:'Vena membawa darah kembali ke jantung.'},
+{q:'Pembuluh paling kecil, tempat pertukaran oksigen dan zat makanan, adalah ...',o:['Aorta','Kapiler','Vena besar','Arteri besar'],a:1,e:'Dinding kapiler sangat tipis sehingga zat mudah berpindah.'},
+{q:'Cara terbaik menjaga jantung tetap sehat adalah ...',o:['Begadang dan jajan sembarangan','Olahraga teratur dan makan sayur buah','Tidak pernah bergerak','Makan gorengan setiap hari'],a:1,e:'Bergerak aktif, tidur cukup, dan makan bergizi menjaga jantung.'}];
+const L3=[
+{q:'Sel darah merah bertugas ...',o:['Melawan kuman','Mengangkut oksigen','Membekukan darah','Memproduksi suara'],a:1,e:'Sel darah merah memakai zat hemoglobin untuk membawa oksigen.'},
+{q:'Sel darah putih bertugas ...',o:['Mengangkut oksigen','Menutup luka','Melawan kuman penyebab penyakit','Memompa darah'],a:2,e:'Sel darah putih adalah pasukan pelindung tubuh.'},
+{q:'Saat tanganmu luka, siapa yang membantu darah membeku?',o:['Keping darah','Sel darah putih','Plasma','Sel darah merah'],a:0,e:'Keping darah menggumpal dan menutup luka.'},
+{q:'Cairan kuning yang membawa sari makanan dan sisa zat disebut ...',o:['Keringat','Air liur','Plasma darah','Empedu'],a:2,e:'Plasma darah adalah bagian cair dari darah.'}];
+
+function quiz(data,title,sub,done){
+  let i=0;const box=$('qz');
+  function render(){
+    const d=data[i],idx=shuf(d.o.map((_,k)=>k));
+    box.innerHTML=`<h2>${title}</h2><div class="bar"><b style="width:${i/data.length*100}%"></b></div><div class="card"><p>${sub} · Soal ${i+1} dari ${data.length}</p><h2>${d.q}</h2><div class="opts"></div><p class="fb" id="fb"></p></div>`;
+    const wrap=box.querySelector('.opts');
+    idx.forEach(k=>{const b=document.createElement('button');b.className='opt';b.textContent=d.o[k];b.onclick=()=>{
+      wrap.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+      if(k===d.a){b.classList.add('ok');sfx.ok();setScore(10);$('fb').textContent='Benar! '+d.e}
+      else{b.classList.add('no');sfx.no();[...wrap.children].find(x=>x.textContent===d.o[d.a]).classList.add('ok');$('fb').textContent='Hampir! Jawaban benar: '+d.o[d.a]+'. '+d.e}
+      const n=document.createElement('button');n.className='btn';n.textContent=i<data.length-1?'Soal berikutnya':'Selesai misi';n.onclick=()=>{i++;i<data.length?render():done()};box.querySelector('.card').appendChild(n);
+    };wrap.appendChild(b)});
+  }
+  render();
+}
+
+/* Misi 2: peta peredaran darah */
+const N=[
+{n:'Seluruh tubuh',e:'🧍',f:'Eri membawa oksigen ke seluruh tubuh lewat arteri dan kapiler. Setelah itu darah menjadi miskin oksigen (biru) dan kembali lewat vena.'},
+{n:'Serambi kanan',e:'🔵',f:'Vena membawa darah miskin oksigen masuk ke serambi kanan jantung.'},
+{n:'Bilik kanan',e:'💪',f:'Bilik kanan memompa darah menuju paru-paru.'},
+{n:'Paru-paru',e:'🫁',f:'Di paru-paru, darah melepas karbon dioksida dan mengambil oksigen. Eri berubah merah lagi!'},
+{n:'Serambi kiri',e:'🔴',f:'Darah kaya oksigen kembali ke jantung lewat serambi kiri.'},
+{n:'Bilik kiri',e:'💥',f:'Bilik kiri berotot paling tebal. Ia memompa darah lewat aorta ke seluruh tubuh.'}];
+const P=N.map((_,i)=>{const a=-Math.PI/2+i*Math.PI/3;return[200+135*Math.cos(a),200+135*Math.sin(a)]});
+function buildMap(){
+  let s='<defs><radialGradient id="cg" cx=".35" cy=".3"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="currentColor"/></radialGradient></defs>';
+  s+='<circle cx="200" cy="200" r="135" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="16" stroke-dasharray="2 12" stroke-linecap="round"/>';
+  s+='<text x="200" y="196" text-anchor="middle" font-size="40">❤️</text><text x="200" y="224" text-anchor="middle" font-size="14" fill="#fff">Jantung</text>';
+  N.forEach((o,i)=>{const[x,y]=P[i];s+=`<g class="node" data-i="${i}" tabindex="0" role="button" aria-label="${o.n}"><circle class="ring" cx="${x}" cy="${y}" r="34" fill="rgba(255,255,255,.14)" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="26">${o.e}</text><text x="${x}" y="${y+50}" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" stroke="#1b1646" stroke-width="3" paint-order="stroke">${o.n}</text></g>`});
+  s+=`<g class="cell" id="cell" style="color:#4cc9f0;transform:translate(${P[0][0]}px,${P[0][1]}px)"><circle r="15" fill="url(#cg)" id="cc"/><ellipse rx="6" ry="3" fill="rgba(0,0,0,.25)"/><circle cx="-5" cy="-4" r="2" fill="#fff"/><circle cx="5" cy="-4" r="2" fill="#fff"/></g>`;
+  $('map').innerHTML=s;
+  $('map').querySelectorAll('.node').forEach(g=>{g.onclick=()=>tap(+g.dataset.i);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')tap(+g.dataset.i)}});
+}
+let cur=0,moving=false;
+function tap(i){
+  if(moving)return;
+  const want=(cur+1)%6;
+  if(i!==want){sfx.no();$('m2f').textContent='Belum tepat. Ikuti arah panah jantung: tujuan berikutnya setelah '+N[cur].n+' adalah ... coba lagi!';return}
+  moving=true;cur=i;
+  $('cell').style.transform=`translate(${P[i][0]}px,${P[i][1]}px)`;
+  const red=i>=3||i===0&&step>0;
+  setTimeout(()=>{sfx.beat();sfx.ok();setScore(20);step++;
+    $('cell').style.color=red?'#ff5a5f':'#4cc9f0';
+    if(i===3||i===4||i===5)$('cell').style.color='#ff5a5f';
+    if(i===0||i===1||i===2)$('cell').style.color='#4cc9f0';
+    if(i===0&&step===6)$('cell').style.color='#4cc9f0';
+    $('m2f').textContent=N[i].f;
+    $('m2t').textContent=step<6?'Bagus! Sekarang ke mana Eri selanjutnya?':'Satu putaran lengkap!';
+    moving=false;
+    if(step===6)setTimeout(()=>{$('m2f').innerHTML=N[0].f+'<br><br><button class="btn" id="n2">Lanjut ke Misi 3</button>';$('n2').onclick=m3},1400);
+  },950);
+}
+function m2(){$('lvl').textContent='Misi 2 · Peta darah';cur=0;step=0;moving=false;buildMap();$('m2f').textContent='Mulai: darah miskin oksigen (biru) kembali dari tubuh. Ketuk Serambi kanan!';$('m2t').textContent='Eri berada di seluruh tubuh. Ketuk tempat tujuan berikutnya!';show(2)}
+function m3(){$('lvl').textContent='Misi 3 · Isi darah';show(1);quiz(L3,'Misi 3: Isi Darah','🧪 Komponen darah',end)}
+function end(){
+  sfx.win();const max=50+120+40,p=score/max;
+  $('stars').textContent=p>.85?'⭐⭐⭐':p>.6?'⭐⭐☆':'⭐☆☆';
+  $('rt').textContent=p>.85?'Hebat! Kamu Dokter Cilik!':p>.6?'Bagus! Kamu Petugas Kesehatan!':'Terus berlatih, Penjelajah!';
+  $('rp').textContent='Skor akhirmu: '+score+' dari '+max+' poin.';
+  $('lvl').textContent='Petualangan Antasari';show(4)}
+$('go').onclick=()=>{ctx();if(!music){music=true;$('mus').textContent='🎵 Musik: nyala';startMusic()}score=0;setScore(0);$('lvl').textContent='Misi 1 · Jantung';show(1);quiz(L1,'Misi 1: Jantung dan Pembuluh','🩺 Organ peredaran darah',m2)};
+$('again').onclick=()=>{score=0;setScore(0);show(0);$('lvl').textContent='Petualangan Antasari'};
+</script>
+</body>
+</html>
